@@ -210,7 +210,7 @@ if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
 fi
 
 link_file "$dotfiles_dir/.zshrc" "$HOME/.zshrc"
-link_file "$dotfiles_dir/.oh-my-zsh/themes/" "$HOME/.oh-my-zsh/themes/ebnx.zsh-theme"
+link_file "$dotfiles_dir/.oh-my-zsh/themes/ebnx.zsh-theme" "$HOME/.oh-my-zsh/themes/ebnx.zsh-theme"
 
 if [[ "$check_repo" == true ]]; then
 	check_repository
