@@ -1,0 +1,30 @@
+# Personal and machine-local configuration
+.config/git/config-personal
+.zshrc.local
+
+# Credentials and private keys
+.aws/
+.config/gh/
+.gnupg/
+.ssh/
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.bak
