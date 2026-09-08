@@ -189,7 +189,8 @@ if ! command -v zellij >/dev/null 2>&1 || [[ "$software_version_check_due" == tr
 	trap - EXIT
 fi
 
-link_file "$dotfiles_dir/.config/zellij" "$HOME/.config/zellij"
+mkdir -p "$HOME/.config/zellij"
+link_file "$dotfiles_dir/.config/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
 
 #####
 # zsh
