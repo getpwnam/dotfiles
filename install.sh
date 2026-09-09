@@ -46,12 +46,32 @@ EOF
 	shift
 done
 
-# check for curl and zsh, if either is missing, install them
-if ! command -v curl >/dev/null 2>&1; then
-	sudo apt-get update && sudo apt-get install -y curl
-fi
-if ! command -v zsh >/dev/null 2>&1; then
-	sudo apt-get update && sudo apt-get install -y zsh
+declare -A pkg_for_cmd=(
+    [git]=git
+    [jq]=jq
+    [fdfind]=fd-find
+    [rg]=ripgrep
+    [keychain]=keychain
+    [zsh]=zsh
+)
+missing_pkgs=()
+
+for cmd in "${!pkg_for_cmd[@]}"; do
+    command -v "$cmd" >/dev/null 2>&1 ||
+        missing_pkgs+=("${pkg_for_cmd[$cmd]}")
+done
+
+if (( ${#missing_pkgs[@]} )); then
+
+    # Run apt update if not already done today
+    if ! [ -n "$( find /var/lib/apt/lists -type f -maxdepth 1 -mtime -1 -print -quit 2>/dev/null)" ]; then
+        echo -n "Updating apt... "
+        sudo apt-get update >/dev/null && echo "OK" || echo "failed"
+    fi
+
+    echo -n "Installing missing packages: "
+    echo -n "${missing_pkgs[@]} ... "
+    sudo apt-get install -y "${missing_pkgs[@]}" >/dev/null && echo "OK" || echo "failed"
 fi
 
 
@@ -195,22 +215,18 @@ link_file "$dotfiles_dir/.config/zellij/config.kdl" "$HOME/.config/zellij/config
 #####
 # zsh
 #####
-# install zsh if necessary 
-if ! command -v zsh >/dev/null 2>&1; then
-	sudo apt-get update && sudo apt-get install -y zsh
-fi
+
+link_file "$dotfiles_dir/.zshrc" "$HOME/.zshrc"
+link_file "$dotfiles_dir/.oh-my-zsh/themes/ebnx.zsh-theme" "$HOME/.oh-my-zsh/themes/ebnx.zsh-theme"
 
 # set current user's shell to zsh if necessary
-if [[ "$SHELL" != "$(command -v zsh)" ]]; then
-    chsh -s "$(command -v zsh)"
-fi
+#if [[ "$SHELL" != "$(command -v zsh)" ]]; then
+#    chsh -s "$(command -v zsh)"
+#fi
 
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
 	sh -c "$(download https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
-
-link_file "$dotfiles_dir/.zshrc" "$HOME/.zshrc"
-link_file "$dotfiles_dir/.oh-my-zsh/themes/ebnx.zsh-theme" "$HOME/.oh-my-zsh/themes/ebnx.zsh-theme"
 
 if [[ "$check_repo" == true ]]; then
 	check_repository

@@ -112,3 +112,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Start keychain
+if command -v keychain >/dev/null 2>&1 ; then
+  eval $(keychain --quick --quiet --eval --agents ssh id_ed25519)
+fi
