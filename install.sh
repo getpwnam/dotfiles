@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+#set -e
 
 script_path="$(readlink -f "${BASH_SOURCE[0]}")"
 dotfiles_dir="$(dirname "$script_path")"
@@ -216,17 +216,22 @@ link_file "$dotfiles_dir/.config/zellij/config.kdl" "$HOME/.config/zellij/config
 # zsh
 #####
 
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+	sh -c "$(download https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
 link_file "$dotfiles_dir/.zshrc" "$HOME/.zshrc"
 link_file "$dotfiles_dir/.oh-my-zsh/themes/ebnx.zsh-theme" "$HOME/.oh-my-zsh/themes/ebnx.zsh-theme"
+
+# ssh
+#
+link_file "$dotfiles_dir/.local/bin/winssh-agent" "$HOME/.local/bin/winssh-agent"
+
 
 # set current user's shell to zsh if necessary
 #if [[ "$SHELL" != "$(command -v zsh)" ]]; then
 #    chsh -s "$(command -v zsh)"
 #fi
-
-if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-	sh -c "$(download https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-fi
 
 if [[ "$check_repo" == true ]]; then
 	check_repository

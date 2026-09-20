@@ -113,7 +113,13 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Start keychain
-if command -v keychain >/dev/null 2>&1 ; then
-  eval $(keychain --quick --quiet --eval --agents ssh id_ed25519)
+export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+
+if [ -x "$HOME/.local/bin/winssh-agent" ]; then
+    "$HOME/.local/bin/winssh-agent"
 fi
+
+# Start keychain
+#if command -v keychain >/dev/null 2>&1 ; then
+#  eval $(keychain --quick --quiet --eval --agents ssh id_ed25519)
+#fi

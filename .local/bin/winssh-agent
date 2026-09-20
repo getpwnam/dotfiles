@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+mkdir -p ~/.ssh
+
+export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+
+rm -f "$SSH_AUTH_SOCK"
+
+NPIPERELAY="$(wslpath "$(cmd.exe /c where npiperelay.exe 2>/dev/null | tr -d '\r' | head -n1)")"
+
+setsid socat \
+  UNIX-LISTEN:$SSH_AUTH_SOCK,fork \
+  EXEC:"$NPIPERELAY -ei -s //./pipe/openssh-ssh-agent" \
+  >/dev/null 2>&1 &
